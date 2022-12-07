@@ -7,8 +7,8 @@ import re
 
 
 def process_line(line, sizes, path):
-    match_cd = re.search(r"^\$ cd (.*)$", line)
     # If cd command
+    match_cd = re.search(r"^\$ cd (.*)$", line)
     if match_cd:
         new_path = match_cd.group(1)
         if new_path == "/":
@@ -21,8 +21,8 @@ def process_line(line, sizes, path):
         else:
             path = path + new_path + "/"
             sizes[path] = 0
-    match_size = re.search(r"^(\d+) .*$", line)
     # If file size
+    match_size = re.search(r"^(\d+) .*$", line)
     if match_size:
         sizes[path] += int(match_size.group(1))
     return (sizes, path)
