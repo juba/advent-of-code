@@ -1,5 +1,4 @@
 from advent import Day
-import re
 
 day = Day(10)
 
