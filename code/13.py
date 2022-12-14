@@ -42,6 +42,10 @@ def solve1(file):
     return sum(indices)
 
 
+print(solve1(day.test_file))
+print(solve1(day.valid_file))
+
+
 # Second puzzle ----------
 
 
@@ -57,7 +61,5 @@ def solve2(file):
     return index2 * index6
 
 
-print(solve1(day.test_file))
-print(solve1(day.valid_file))
 print(solve2(day.test_file))
 print(solve2(day.valid_file))
