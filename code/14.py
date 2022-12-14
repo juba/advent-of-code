@@ -4,8 +4,7 @@ day = Day(14)
 
 
 def build_space(lines):
-    rocks = []
-    void = []
+    rocks = set()
     for line in lines:
         points = line.split(" -> ")
         for i in range(len(points) - 1):
@@ -13,7 +12,7 @@ def build_space(lines):
             x1, y1 = map(int, points[i + 1].split(","))
             for x in range(min(x0, x1), max(x0, x1) + 1):
                 for y in range(min(y0, y1), max(y0, y1) + 1):
-                    rocks.append(complex(x, y))
+                    rocks.add(complex(x, y))
     max_y = max(map(lambda x: int(x.imag), rocks))
     return max_y, rocks
 
@@ -25,7 +24,7 @@ def move1(position, rocks):
     for new_pos in [position + 1j, position - 1 + 1j, position + 1 + 1j]:
         if new_pos not in rocks:
             return new_pos
-    rocks.append(position)
+    rocks.add(position)
     return position
 
 
@@ -57,7 +56,7 @@ print(solve1(day.valid_file))  # 674
 
 
 def fill_pyramid(max_y, rocks):
-    sands = [500 + 0j]
+    sands = {500 + 0j}
     for y in range(1, max_y + 2):
         for x in range(500 - y, 500 + y + 1):
             pos = complex(x, y)
@@ -66,7 +65,7 @@ def fill_pyramid(max_y, rocks):
                 or pos - 1j - 1 in sands
                 or pos - 1j + 1 in sands
             ):
-                sands.append(pos)
+                sands.add(pos)
     return sands
 
 
