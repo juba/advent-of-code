@@ -14,53 +14,43 @@ def build_space(lines):
             for x in range(min(x0, x1), max(x0, x1) + 1):
                 for y in range(min(y0, y1), max(y0, y1) + 1):
                     rocks.append(complex(x, y))
-    min_x = min(map(lambda x: int(x.real), rocks))
-    max_x = max(map(lambda x: int(x.real), rocks))
     max_y = max(map(lambda x: int(x.imag), rocks))
-    for y in range(0, max_y + 1):
-        void.append(complex(min_x - 1, y))
-        void.append(complex(max_x + 1, y))
-    for x in range(min_x - 1, max_x + 2):
-        void.append(complex(x, max_y + 1))
-    return rocks, void
+    return max_y, rocks
 
 
 # First puzzle ----------
 
 
-def move1_1(position, rocks, void):
+def move1(position, rocks):
     for new_pos in [position + 1j, position - 1 + 1j, position + 1 + 1j]:
-        if new_pos in void:
-            return 0
         if new_pos not in rocks:
             return new_pos
     rocks.append(position)
     return position
 
 
-def move_1(rocks, void):
+def move(max_y, rocks):
     position = 500 + 0j
-    while True:
-        new_pos = move1_1(position, rocks, void)
-        if new_pos == 0 or new_pos == 500 + 0j:
-            return True
+    while position.imag < max_y + 1:
+        new_pos = move1(position, rocks)
         if new_pos == position:
             return False
         position = new_pos
+    return True
 
 
 def solve1(file):
-    rocks, void = build_space(open(file, "r").read().split("\n"))
+    max_y, rocks = build_space(open(file, "r").read().split("\n"))
     is_void = False
     count = 0
     while not is_void:
         count += 1
-        is_void = move_1(rocks, void)
+        is_void = move(max_y, rocks)
     return count - 1
 
 
-print(solve1(day.test_file))
-print(solve1(day.valid_file))
+print(solve1(day.test_file))  # 24
+print(solve1(day.valid_file))  # 674
 
 
 # Second puzzle ----------
@@ -68,7 +58,7 @@ print(solve1(day.valid_file))
 
 def fill_pyramid(max_y, rocks):
     sands = [500 + 0j]
-    for y in range(1, max_y + 1):
+    for y in range(1, max_y + 2):
         for x in range(500 - y, 500 + y + 1):
             pos = complex(x, y)
             if (pos not in rocks) and (
@@ -76,16 +66,15 @@ def fill_pyramid(max_y, rocks):
                 or pos - 1j - 1 in sands
                 or pos - 1j + 1 in sands
             ):
-                sands.append(complex(x, y))
+                sands.append(pos)
     return sands
 
 
 def solve2(file):
-    rocks, _ = build_space(open(file, "r").read().split("\n"))
-    max_y = max(map(lambda x: int(x.imag), rocks)) + 1
+    max_y, rocks = build_space(open(file, "r").read().split("\n"))
     sands = fill_pyramid(max_y, rocks)
     return len(sands)
 
 
-print(solve2(day.test_file))
-print(solve2(day.valid_file))
+print(solve2(day.test_file))  # 93
+print(solve2(day.valid_file))  # 24958
