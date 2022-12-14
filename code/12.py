@@ -51,7 +51,7 @@ def bfs(grille, start=None):
             continue
         marked.append(node)
         for neighb in grille.get_neighbors(node[0], node[1]):
-            queue.appendleft([length + 1, neighb])
+            queue.appendleft([length + 1, neighb])  # type: ignore
 
 
 # First puzzle ----------
