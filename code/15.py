@@ -35,9 +35,9 @@ def reduce_ranges(ranges):
     return ranges
 
 
-def get_no_beacons(lines, y):
+def get_no_beacons(measures, y):
     no_beacon = []
-    for l in lines:
+    for l in measures:
         width = int(l["dist"] - abs(y - l["sensor"].imag))
         if width >= 0:
             r = int(l["sensor"].real)
@@ -50,8 +50,8 @@ def get_no_beacons(lines, y):
 
 
 def solve1(file, y_line):
-    lines = map(parse, open(file, "r").read().split("\n"))
-    no_beacon = get_no_beacons(lines, y_line)
+    measures = map(parse, open(file, "r").read().split("\n"))
+    no_beacon = get_no_beacons(measures, y_line)
     size = sum(map(lambda r: r.stop - r.start - 1, no_beacon))
     return size
 
@@ -64,10 +64,10 @@ print(solve1(day.valid_file, y_line=2000000))
 
 
 def solve2(file, limit):
-    lines = list(map(parse, open(file, "r").read().split("\n")))
+    measures = list(map(parse, open(file, "r").read().split("\n")))
     x = -1
     for y in range(limit + 1, 0, -1):
-        if len(no_beacon := get_no_beacons(lines, y)) > 1:
+        if len(no_beacon := get_no_beacons(measures, y)) > 1:
             x = min(no_beacon[0].stop, no_beacon[1].stop)
             break
     if x == -1:
