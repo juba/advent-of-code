@@ -40,7 +40,7 @@ def get_no_beacons(measures, y):
         width = l["dist"] - abs(y - l["sensor"].imag)
         if width >= 0:
             r = l["sensor"].real
-            interv = (int(r - width), int(r + width + 1))
+            interv = (int(r - width), int(r + width))
             no_beacon.append(interv)
     return reduce_ranges(no_beacon)
 
@@ -49,14 +49,17 @@ def get_no_beacons(measures, y):
 
 
 def solve1(file, y_line):
-    measures = map(parse, open(file, "r").read().split("\n"))
+    measures = list(map(parse, open(file, "r").read().split("\n")))
     no_beacon = get_no_beacons(measures, y_line)
-    size = sum(map(lambda r: r[1] - r[0] - 1, no_beacon))
+    n_beacons = len(
+        set(l["beacon"] for l in measures if l["beacon"].imag == y_line)
+    )
+    size = sum(map(lambda r: r[1] - r[0] + 1, no_beacon)) - n_beacons
     return size
 
 
 solve1(day.test_file, y_line=10)
-%timeit solve1(day.valid_file, y_line=2000000)
+solve1(day.valid_file, y_line=2000000)
 
 
 # Second puzzle ---------
