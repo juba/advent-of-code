@@ -36,6 +36,11 @@ def compute_paths(passages, flows):
             dpaths[start] = [(end, dist, flows[end])]
         else:
             dpaths[start].append((end, dist, flows[end]))
+    # Sort paths by decreasing flow values
+    dpaths = {
+        k: sorted(v, key=lambda x: x[2], reverse=True)
+        for k, v in dpaths.items()
+    }
     return dpaths
 
 
