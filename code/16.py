@@ -58,11 +58,9 @@ def max_remain(flows, visited, minutes):
     remain_flows = sorted(
         [v for k, v in flows.items() if k not in visited], reverse=True
     )
+    shortest = min(len(remain_flows), minutes)
     return sum(
-        [
-            remain_flows[i] * (minutes - i * 2 - 1)
-            for i in range(min(len(remain_flows), minutes))
-        ]
+        [remain_flows[i] * (minutes - 1 - i * 2) for i in range(shortest)]
     )
 
 
@@ -76,23 +74,17 @@ def solve1(file):
     ]
     best_pressure = 0
     for i in range(0, len(flows) - 1):
-        print(i)
         new_solutions = []
         for sol in solutions:
-            pos = sol["pos"]
-            possible_paths = [
-                path for path in paths[pos] if path[0] not in sol["visited"]
-            ]
-            for path in possible_paths:
-                minutes = sol["minutes"] - path[1] - 1
-                if minutes <= 0:
+            for path in paths[sol["pos"]]:
+                if path[0] in sol["visited"]:
                     continue
-                pressure = sol["pressure"] + path[2] * minutes
-                if pressure > best_pressure:
+                if (minutes := sol["minutes"] - path[1] - 1) <= 0:
+                    continue
+                if (pressure := sol["pressure"] + path[2] * minutes) > best_pressure:
                     best_pressure = pressure
                 visited = sol["visited"] + [path[0]]
-                best_remain = max_remain(flows, visited, minutes)
-                if best_remain <= (best_pressure - pressure):
+                if max_remain(flows, visited, minutes) <= (best_pressure - pressure):
                     continue
                 new_solutions.append(
                     {
@@ -109,7 +101,7 @@ def solve1(file):
 
 
 solve1(day.test_file)
-solve1(day.valid_file)
+%timeit solve1(day.valid_file)
 
 # Second puzzle ---------
 
