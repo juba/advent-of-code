@@ -8,16 +8,21 @@ from copy import deepcopy
 day = Day(16)
 
 
-def parse(file):
-    passages = {}
-    flows = {}
-    for line in open(file, "r").read().split("\n"):
-        id, flow, children = re.findall(
-            r"Valve ([A-Z]{2}).*=(\d+);.*to valves? (.*)$", line
-        )[0]
-        passages[id] = children.split(", ")
-        if int(flow) > 0 or id == "AA":
-            flows[id] = int(flow)
+def bfs(passages, start, end):
+    queue = deque([(0, start)])
+    marked = []
+    while len(queue) > 0:
+        length, pos = queue.pop()
+        if pos == end:
+            return length
+        if pos in marked:
+            continue
+        marked.append(pos)
+        for child in passages[pos]:
+            queue.appendleft((length + 1, child))  # type: ignore
+
+
+def compute_paths(passages, flows):
     # Compute shortest distances between non-zero valves
     paths = [
         (start, end, bfs(passages, start, end))
@@ -31,22 +36,22 @@ def parse(file):
             dpaths[start] = [(end, dist, flows[end])]
         else:
             dpaths[start].append((end, dist, flows[end]))
+    return dpaths
+
+
+def parse(file):
+    passages = {}
+    flows = {}
+    for line in open(file, "r").read().split("\n"):
+        id, flow, children = re.findall(
+            r"Valve ([A-Z]{2}).*=(\d+);.*to valves? (.*)$", line
+        )[0]
+        passages[id] = children.split(", ")
+        if int(flow) > 0 or id == "AA":
+            flows[id] = int(flow)
+    paths = compute_paths(passages, flows)
     # Return paths dictionary and flows
-    return dpaths, flows
-
-
-def bfs(passages, start, end):
-    queue = deque([(0, start)])
-    marked = []
-    while len(queue) > 0:
-        length, pos = queue.pop()
-        if pos == end:
-            return length
-        if pos in marked:
-            continue
-        marked.append(pos)
-        for child in passages[pos]:
-            queue.appendleft((length + 1, child))  # type: ignore
+    return paths, flows
 
 
 def max_remain(flows, visited, minutes):
@@ -65,7 +70,7 @@ def max_remain(flows, visited, minutes):
 
 
 def solve1(file):
-    dpaths, flows = parse(file)
+    paths, flows = parse(file)
     solutions = [
         {"visited": ["AA"], "pos": "AA", "pressure": 0, "minutes": 30}
     ]
@@ -76,7 +81,7 @@ def solve1(file):
         for sol in solutions:
             pos = sol["pos"]
             possible_paths = [
-                path for path in dpaths[pos] if path[0] not in sol["visited"]
+                path for path in paths[pos] if path[0] not in sol["visited"]
             ]
             for path in possible_paths:
                 minutes = sol["minutes"] - path[1] - 1
