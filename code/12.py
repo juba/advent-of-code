@@ -1,4 +1,4 @@
-from advent import Day
+from advent.day import Day
 from collections import deque
 import re
 

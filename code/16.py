@@ -1,4 +1,4 @@
-from advent import Day
+from advent.day import Day
 import re
 from collections import deque
 from itertools import combinations

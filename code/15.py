@@ -1,4 +1,4 @@
-from advent import Day
+from advent.day import Day
 import re
 
 day = Day(15)

@@ -1,4 +1,4 @@
-from advent import Day
+from advent.day import Day
 from itertools import zip_longest, starmap
 from functools import cmp_to_key
 

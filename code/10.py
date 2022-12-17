@@ -1,4 +1,4 @@
-from advent import Day
+from advent.day import Day
 
 day = Day(10)
 

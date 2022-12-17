@@ -1,4 +1,4 @@
-from advent import Day
+from advent.day import Day
 from functools import reduce
 import re
 
