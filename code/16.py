@@ -2,7 +2,6 @@ from advent import Day
 import re
 from collections import deque
 from itertools import combinations
-from copy import deepcopy
 
 
 day = Day(16)
