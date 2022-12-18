@@ -37,6 +37,8 @@ def solve1(file, n_pieces=2022, detect_cycle=False):
     for i in range(n_pieces):
         # Cycle detection
         if detect_cycle:
+            # FIXME This doesn't work in all cases. Must compute a cycle
+            # of piece, move, and terrain features
             piece_move = (i % len(pieces), count % len(jets))
             if piece_move in combs:
                 if cycle_start == 0:
