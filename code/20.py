@@ -4,7 +4,7 @@ import numpy as np
 day = Day(20)
 
 
-def solve(orig, n_mix=1, debug=False):
+def solve(orig, n_mix=1):
     n = len(orig)
     # Transform values into (divider, rest tuples)
     a = list(
@@ -30,8 +30,6 @@ def solve(orig, n_mix=1, debug=False):
             a.insert(new_pos, (mul, item))
             a_positions.remove(i)
             a_positions.insert(new_pos, i)
-            if debug:
-                print(a)
     zero_pos = a.index((0, 0))
     indices = [(zero_pos + i) % n for i in (1000, 2000, 3000)]
     pos = [a[index][0] * (n - 1) + a[index][1] for index in indices]
@@ -41,21 +39,21 @@ def solve(orig, n_mix=1, debug=False):
 # First puzzle ----------
 
 
-def solve1(lines, debug=False):
+def solve1(lines):
     orig = list(map(int, lines))
-    return solve(orig, debug=debug)
+    return solve(orig)
 
 
-print(solve1(day.test_lines, debug=False))  # 3
+print(solve1(day.test_lines))  # 3
 print(solve1(day.valid_lines))  # 4914
 
 # Second puzzle ----------
 
 
-def solve2(lines, debug=False):
+def solve2(lines):
     orig = list(map(lambda x: int(x) * 811589153, lines))
-    return solve(orig, n_mix=10, debug=debug)
+    return solve(orig, n_mix=10)
 
 
-print(solve2(day.test_lines, debug=False))  # 1623178306
-print(solve2(day.valid_lines))  #
+print(solve2(day.test_lines))  # 1623178306
+print(solve2(day.valid_lines))  # 7973051839072
