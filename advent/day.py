@@ -14,3 +14,19 @@ class Day:
     @property
     def valid_input(self):
         return open(self.valid_file, "r")
+
+    @property
+    def test_content(self):
+        return self.test_input.read()
+
+    @property
+    def valid_content(self):
+        return self.valid_input.read()
+
+    @property
+    def test_lines(self):
+        return self.test_content.splitlines()
+
+    @property
+    def valid_lines(self):
+        return self.valid_content.splitlines()
