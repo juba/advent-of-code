@@ -63,4 +63,4 @@ def solve2(lines):
 
 
 print(solve2(day.test_lines))
-%timeit print(solve2(day.valid_lines))
+print(solve2(day.valid_lines))
